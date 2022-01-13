@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+let parity = 0;
+let round = {round: 1};
+let currentScores = {scorePlayer1: 0, scorePlayer2: 0 };
+let cumScores = {scorePlayer1: 0, scorePlayer2: 0 };
+
+/* updates the current scores when someone moves, and checks for a win */
+function updateCurrentScore(currentScores, playerNumber) {
+	/* card draw */
+	if (playerNumber == 1) {
+    	currentScores.scorePlayer1 += Math.floor(Math.random() * 10 + 1);
+        document.getElementById("Player1Score").innerHTML = "Player 1 Score: "
+				+ currentScores.scorePlayer1; }
+
+    else if (playerNumber == 2) {
+    	currentScores.scorePlayer2 += Math.floor(Math.random() * 10 + 1);
+        document.getElementById("Player2Score").innerHTML = "Player 2 Score: "
+				+ currentScores.scorePlayer2; }
+
+/* checking if someone won  */
+    if (currentScores.scorePlayer1 > 21 || currentScores.scorePlayer2 == 21) {
+        	document.getElementById("GameStatus").innerHTML = "Player 2 Wins"; }
+
+    else if (currentScores.scorePlayer2 > 21 || currentScores.scorePlayer1 == 21) {
+        	document.getElementById("GameStatus").innerHTML = "Player 1 Wins"; }
+
+		document.getElementById("GameStatus").innerHTML = "No Winner Yet";
+
+}
+
+function resetCurrentScores(currentScores, cumScores, round) {
+	if (currentScores.scorePlayer1 == 21 || currentScores.scorePlayer2 > 21 ||
+		 (currentScores.scorePlayer1 < 21 && currentScores.scorePlayer2 < 21 &&
+			currentScores.scorePlayer1 > currentScores.scorePlayer2 ) ) {
+    	cumScores.scorePlayer1 += 1;
+        document.getElementById("Player1Cum").innerHTML = "Player 1 Cumulative: " + cumScores.scorePlayer1;
+				document.getElementById("GameStatus").innerHTML = "Player1 Wins";
+    }
+
+    else if (currentScores.scorePlayer2 == 21 || currentScores.scorePlayer1 > 21 || (currentScores.scorePlayer2 < 21 && currentScores.scorePlayer1 < 21 && currentScores.scorePlayer2 > currentScores.scorePlayer1 )) {
+    	cumScores.scorePlayer2 += 1;
+        document.getElementById("Player2Cum").innerHTML = "Player 2 Cumulative: " + cumScores.scorePlayer2;
+				document.getElementById("GameStatus").innerHTML = "Player2 Wins";
+    }
+
+		else {
+			cumScores.scorePlayer1 += 0.5;
+			cumScores.scorePlayer2 += 0.5;
+			document.getElementById("Player1Cum").innerHTML = "Player 1 Cumulative: " + cumScores.scorePlayer1;
+			document.getElementById("Player2Cum").innerHTML = "Player 2 Cumulative: " + cumScores.scorePlayer2;
+		}
+
+     currentScores.scorePlayer1 = 0;
+     currentScores.scorePlayer2 = 0;
+
+     document.getElementById("Player1Score").innerHTML = "Player 1 Score: " + currentScores.scorePlayer1;
+     document.getElementById("Player2Score").innerHTML = "Player 2 Score: " + currentScores.scorePlayer2;
+
+     round.round += 1;
+     document.getElementById("Round").innerHTML = "Round: " + round.round;
+}
+
+function resetCumulativeScores(cumScores, round) {
+	if (cumScores.scorePlayer1 > cumScores.scorePlayer2) {
+		document.getElementById("GameStatus").innerHTML = "Player 1 wins the game";}
+
+	else if (cumScores.scorePlayer2 > cumScores.scorePlayer1) {
+		document.getElementById("GameStatus").innerHTML  = "Player 2 wins the game";}
+
+	else {
+		document.getElementById("GameStatus").innerHTML = "It's a Draw"
+	}
+	cumScores.scorePlayer1 = 0;
+    cumScores.scorePlayer2 = 0;
+    round.round = 1;
+
+    document.getElementById("Player1Cum").innerHTML = "Player 1 Cumulative: 0";
+    document.getElementById("Player2Cum").innerHTML = "Player 2 Cumulative: 0";
+    document.getElementById("Round").innerHTML = "Round: 1";
+}
+
+
+</script>
+
+<style>
+h1 {
+	font-family: helvetica;
+ 	font-size: 400%;
+	font-weight: bolder; }
+
+h2 {
+	font-size: 100%;
+	font-family: helvetica;
+	font-weight: medium;
+}
+
+p {
+	font-size: 100%;
+	font-family: helvetica;
+	font-weight: normal; }
+</style>
+
+</head>
+
+<body>
+
+<h1>Modified BlackJack</h1>
+<p> <strong> Instructions: </strong> Click "Player X Draws" on your turn. When both players are done drawing for
+	the round, click "End Round" to determine the winner of the round and to advance to the next round. When the players
+	wish to end the game, click "End Game" to determine the final winner and reset everything.
+</p>
+
+<h2 id="Round"> <strong> Round: 1 </strong> </h2>
+<p id="Player1Score">Player 1 Score: 0 </p>
+<p id="Player2Score">Player 2 Score: 0 </p>
+<h2 id="GameStatus"><strong> No Winner Yet </strong> </h2>
+<p id="Player1Cum">Player 1 Cumulative: 0 </p>
+<p id="Player2Cum">Player 2 Cumulative: 0 </p>
+
+<button type="button" onclick="updateCurrentScore(currentScores, 1)">Player1 Draws</button>
+
+<button type="button" onclick="updateCurrentScore(currentScores, 2)">Player2 Draws</button>
+
+<button type="button" onclick="resetCurrentScores(currentScores, cumScores, round)">End Round</button>
+
+<button type="button" onclick="resetCumulativeScores(cumScores, round)">End Game</button>
+
+</body>
+</html>
